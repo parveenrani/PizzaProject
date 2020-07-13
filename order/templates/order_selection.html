@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block title %}
+	Order Selection
+{% endblock %}
+{% block body %}
+
+    <div class="container">
+    <h1></h1>
+        <div class="row">
+             <div class="col-md-2 ">
+                  <table id="userTable">
+                      {% if Category %}
+                          {% for c in Category %}
+                          <tr>
+                              <td>
+                                  <a class="category" style="cursor: pointer;"  id="{{c.id}}" data-name="{{c.categoryName}}"><strong>{{c.categoryName}}</strong></a>
+                              </td>
+                          </tr>
+
+                          {% endfor %}
+
+                      {% else %}
+                            No Category
+                      {% endif %}
+                </table>
+             </div>
+             <div class="col-md-5">
+                                 <input class="form-control" id="item-id" type="hidden" name="itemid"/>
+                                 <input class="form-control" id="actual-item-price" type="hidden" name="actualitemprice"/>
+
+                 <table id="menu" class="table table-striped">
+                     <tr>
+                         <td colspan="3">
+                             <h1>Welcome in Pizza's world....</h1>
+                         </td>
+                     </tr>
+                </table>
+             </div>
+            <div class="col-md-5">
+                <h2>{{ user.username|title }}'s CART</h2>
+                <hr>
+                <table id="cart" class="table table-striped">
+
+                          {% for orderitem in order.get_cart_items %}
+                          <tr id="cartitem-{{orderitem.id}}">
+                                <td>
+                                  <strong>{{orderitem.qty}}  {{orderitem.size}}   {{orderitem.orderitem}}  {{orderitem.topping}}</strong>
+                              </td>
+
+                              <td class="price" name="price">
+                                  <strong>{{orderitem.price}}</strong>
+
+                                  <button class="remove" onclick="deleteCartItem({{orderitem.id}},'{{orderitem.size}}')" ><strong>-</strong></button>
+                              </td>
+                          </tr>
+
+                          {% endfor %}
+
+                </table>
+                <hr>
+                <input type="text" id="carttotal" value="Total ${{order.get_cart_total}}" class="form-control form-control-lg pull-right"
+                       style="background-color: transparent;border: none; text-align:right;font-weight: bold;">
+               <br/>
+                <a id="myviewcart" href="{% url 'order_summary' %}" class="btn btn-primary pull right">View Cart</a>
+
+                <a id="mycheckout" href="{% url 'checkout' %}" data-checkval="{{order.orderno}}" class="btn btn-primary pull right">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+  <div id="modal" class="modal fade" role='dialog'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Size and Toppings</h4>
+            </div>
+            <form id="addtopping" action="">
+            <div class="modal-body" id= "modal-body">
+                <select id="size">
+                    <option value="Small">Small</option>
+                    <option value="Large">Large</option>
+                </select>
+                <p>Here the description starts here........</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </form>
+        </div>
+      </div>
+  </div>
+<!--Modal ends here--->
+
+
+
+{% endblock %}

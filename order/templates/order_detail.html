@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}
+	Orders
+{% endblock %}
+
+
+{% block body %}
+<h1>Orders</h1>
+ {%for order in orders%}
+        <div class="myDiv" style="border: 2px outset red;background-color: lightblue;text-align: center; width:50%; align:center;">
+            {% if user.is_superuser %}
+           <p>Order No.{{order.orderno}} by {{order.users.username}} placed on  {{order.orderdate}}</p>
+        {% else %}
+            <p>Order No. {{order.orderno}} placed on {{order.orderdate}}</p>
+        {% endif %}
+           {%for orderitem in order.get_cart_items%}
+            <p>
+                {{orderitem.size}}  {{orderitem.orderitem}} {{orderitem.topping}}
+            </p>
+{%endfor%}
+            Price:{{order.get_cart_total}}<br>
+            {%if order.is_completed%}
+                <p>This order is completed...</p>
+            {% else %}
+            <p id="orderstatus-{{order.orderno}}">Order initiated</p>
+            {% if user.is_superuser %}
+            <button class="btn btn-success complete" type="button" id="complete-{{order.orderno}}" data-orderno="{{order.orderno}}"><strong>Mark as Complete</strong></button>
+            {% endif %}
+            {% endif %}
+        </div>
+<br>
+ {%endfor%}
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "basemenu.html" %}
+{% block title %}
+	Order Checkout
+{% endblock %}
+{% block body %}
+<div style="width:500px;height:auto;background-color:yellow;margin-right:auto;margin-left:auto;">
+    <h5 style="text-align:center;" id="ordno">    Your Order with order number {{order.orderno}} has been placed.  </h5>
+
+{%for orderitem in order.get_cart_items%}
+    {% if orderitem.size == "S" %}
+    <p>{{orderitem.qty}} Small  {{orderitem.orderitem}} {{orderitem.topping}}  -   {{orderitem.price}}
+    </p>
+    {%elif orderitem.size == "L" %}
+    <p>{{orderitem.qty}} Large  {{orderitem.orderitem}} {{orderitem.topping}}      -    {{orderitem.price}}
+    </p>
+    {% else %}
+    <p>{{orderitem.qty}}  {{orderitem.orderitem}} {{orderitem.topping}}      -    {{orderitem.price}}
+    </p>
+    {%endif%}
+    {% empty %}
+<p>
+    You have not added any item yet.
+    </p>
+{%endfor%}
+
+{% if order.get_cart_total != None%}
+    <p style="text-align:center;"><strong>Order Total: {{ order.get_cart_total }}</strong></p>
+{%endif%}
+<h5 style="">We appreciate your business..</h5>
+</div>
+    <button style="width: 50%; float:right;" class="btn btn-primary">Pay with card</button>
+{% endblock %}

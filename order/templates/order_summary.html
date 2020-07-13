@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}
+	Order Summary
+{% endblock %}
+
+
+
+{% block body %}
+<table id="cart">
+    <tr>
+         <th>Item</th>
+        <th>Price</th>
+    </tr>
+{%for orderitem in order.get_cart_items%}
+    <tr id="cartitem-{{orderitem.id}}">
+
+            <td>
+           <strong> {{orderitem.qty}}   {{orderitem.orderitem}}  {{orderitem.topping}}   {{orderitem.size}}</strong>
+            </td>
+
+
+        <td class="price" name="price">
+       <strong>     {{orderitem.price}}</strong>
+
+             <button class="remove" onclick="deleteCartItem({{orderitem.id}},'{{orderitem.size}}')"  ><strong>-</strong></button>
+
+        </td>
+    </tr>
+{% empty %}
+<tr>
+    <td colspan="4">
+    You have not added any item yet.</td>
+    </tr>
+{%endfor%}
+</table>
+{% if order.get_cart_total != None%}
+    <input type="text" id="carttotal" value="Total ${{order.get_cart_total}}" class="form-control form-control-lg pull-right"
+           style="background-color: transparent;border: none; text-align:right;">
+{%endif%}
+<table>
+<tr>
+    <td colspan="2">
+        <a href="{% url 'category_ajax' %}" class="btn btn-warning pull-left">
+    {% if order%}
+        Back to Menu
+    {%else%}
+        Add items to cart
+    {%endif%}
+    </a>
+    </td>
+    <td style="float:right;">
+
+        {% if order.get_cart_items %}
+        <a href="{% url 'checkout' %}" class="btn btn-primary pull right">Proceed to Checkout</a>
+        {% endif %}
+    </td>
+</tr>
+</table>
+{% endblock %}
